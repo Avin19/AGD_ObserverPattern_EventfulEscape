@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class PlayerController
     private float mouseX;
     private PlayerState playerState;
 
+
     public int KeysEquipped { get => playerScriptableObject.KeysEquipped; set => playerScriptableObject.KeysEquipped = value; }
     public PlayerState PlayerState { get => playerState; private set => playerState = value; }
 
@@ -25,8 +27,20 @@ public class PlayerController
 
         this.playerScriptableObject = playerScriptableObject;
         this.playerScriptableObject.KeysEquipped = 0;
-
+        LightSwitchView.lightSwitchDelegate += LightSwitchDelegate;
         playerState = PlayerState.InDark;
+    }
+
+    private void LightSwitchDelegate()
+    {
+        if (playerState == PlayerState.InDark)
+        {
+            playerState = PlayerState.None;
+        }
+        else
+        {
+            playerState = PlayerState.InDark;
+        }
     }
 
     public void Interact() => IsInteracted = Input.GetKeyDown(KeyCode.E) ? true : (Input.GetKeyUp(KeyCode.E) ? false : IsInteracted);
