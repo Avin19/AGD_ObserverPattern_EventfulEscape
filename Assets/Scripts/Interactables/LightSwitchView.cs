@@ -47,3 +47,11 @@ public class LightSwitchView : MonoBehaviour, IInteractable
         GameService.Instance.GetInstructionView().HideInstruction();
     }
 }
+
+
+
+//Good Practices
+
+//1. Alaways append the listerener using +=
+//2. Always have  unsub to any delegate/event
+//3. Always have null check while invokng any delgate/event using?.InVoke();
