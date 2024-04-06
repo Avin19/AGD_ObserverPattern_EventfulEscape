@@ -27,14 +27,16 @@ public class PlayerController
         this.playerScriptableObject.KeysEquipped = 0;
         playerState = PlayerState.InDark;
 
-        EventService.Instance.OnLightSwitchToggled.AddListener(onLightSwitch);
+        EventService.Instance.OnLightSwitchToggled.AddListener(OnLightSwitch);
+        EventService.Instance.OnLightsOffByGhostEvent.AddListener(OnLightTurnedOffByGhost);
         EventService.Instance.OnKeyPickedUp.AddListener(OnKeyPickedUp);
     }
 
     ~PlayerController()
     {
-        EventService.Instance.OnLightSwitchToggled.RemoveListener(onLightSwitch);
+        EventService.Instance.OnLightSwitchToggled.RemoveListener(OnLightSwitch);
         EventService.Instance.OnKeyPickedUp.RemoveListener(OnKeyPickedUp);
+        EventService.Instance.OnLightsOffByGhostEvent.RemoveListener(OnLightTurnedOffByGhost);
     }
 
     private void OnKeyPickedUp(int keys) => KeysEquipped = keys;
@@ -57,7 +59,7 @@ public class PlayerController
 
         Quaternion rotation;
         Vector3 position;
-        calculatePositionRotation(playerRigidbody, transform, out rotation, out position);
+        CalculatePositionRotation(playerRigidbody, transform, out rotation, out position);
 
         playerRigidbody.MoveRotation(rotation);
         playerRigidbody.MovePosition(position);
@@ -75,7 +77,7 @@ public class PlayerController
         mouseX = Input.GetAxis("Mouse X");
         velocity = Input.GetKey(KeyCode.LeftShift) ? playerScriptableObject.sprintSpeed : playerScriptableObject.walkSpeed;
     }
-    private void calculatePositionRotation(Rigidbody playerRigidbody, Transform transform, out Quaternion rotation, out Vector3 position)
+    private void CalculatePositionRotation(Rigidbody playerRigidbody, Transform transform, out Quaternion rotation, out Vector3 position)
     {
         Vector3 lookRotation = new Vector3(0, mouseX * playerScriptableObject.sensitivity, 0);
         Vector3 movement = (transform.forward * verticalAxis + transform.right * horizontalAxis);
@@ -84,11 +86,15 @@ public class PlayerController
         position = (transform.position) + (velocity * movement) * Time.fixedDeltaTime;
     }
 
-    private void onLightSwitch()
+    private void OnLightSwitch()
     {
         if (PlayerState == PlayerState.InDark)
             PlayerState = PlayerState.None;
         else
             PlayerState = PlayerState.InDark;
+    }
+    private void OnLightTurnedOffByGhost()
+    {
+        playerState = PlayerState.InDark;
     }
 }
