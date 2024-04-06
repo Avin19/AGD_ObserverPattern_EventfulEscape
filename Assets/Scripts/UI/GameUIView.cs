@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameUIView : MonoBehaviour
 {
@@ -23,21 +24,28 @@ public class GameUIView : MonoBehaviour
     {
         EventService.Instance.OnKeyPickedUp.AddListener(OnKeyEquipped);
         EventService.Instance.OnLightsOffByGhostEvent.AddListener(SetRedVignette);
-        EventService.Instance.PlayerEscapedEvent.AddListener(OnPlayerEscaped);
-        EventService.Instance.PlayerDeathEvent.AddListener(SetRedVignette);
-        EventService.Instance.PlayerDeathEvent.AddListener(OnPlayerDeath);
+        EventService.Instance.OnPlayerEscapedEvent.AddListener(OnPlayerEscaped);
+        EventService.Instance.OnPlayerDeathEvent.AddListener(SetRedVignette);
+        EventService.Instance.OnPlayerDeathEvent.AddListener(OnPlayerDeath);
+        EventService.Instance.OnRatRushEvent.AddListener(OnRatRush);
 
         tryAgainButton.onClick.AddListener(OnTryAgainButtonClicked);
         quitButton.onClick.AddListener(OnQuitButtonClicked);
+    }
+
+    private void OnRatRush()
+    {
+        SetRedVignette();
     }
 
     private void OnDisable()
     {
         EventService.Instance.OnKeyPickedUp.RemoveListener(OnKeyEquipped);
         EventService.Instance.OnLightsOffByGhostEvent.RemoveListener(SetRedVignette);
-        EventService.Instance.PlayerEscapedEvent.RemoveListener(OnPlayerEscaped);
-        EventService.Instance.PlayerDeathEvent.RemoveListener(SetRedVignette);
-        EventService.Instance.PlayerDeathEvent.RemoveListener(OnPlayerDeath);
+        EventService.Instance.OnPlayerEscapedEvent.RemoveListener(OnPlayerEscaped);
+        EventService.Instance.OnPlayerDeathEvent.RemoveListener(SetRedVignette);
+        EventService.Instance.OnPlayerDeathEvent.RemoveListener(OnPlayerDeath);
+        EventService.Instance.OnRatRushEvent.RemoveListener(OnRatRush);
     }
 
     public void UpdateInsanity(float playerSanity) => insanityImage.rectTransform.localScale = new Vector3(1, playerSanity, 1);
