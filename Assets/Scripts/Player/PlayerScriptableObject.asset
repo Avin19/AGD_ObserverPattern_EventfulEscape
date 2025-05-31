@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastLength: 1.05
   jumpForce: 3
-  sensitivity: 1
-  walkSpeed: 2
+  sensitivity: 3
+  walkSpeed: 3
   sprintSpeed: 4
   rotationLimit: 0.5
-  KeysEquipped: 0
+  KeysEquipped: 1
